@@ -49,6 +49,15 @@
 	<!-- Anime Search Page -->
 	<div id="search" class="section" style="display:none;">
 		<div class="container py-4">
+			<!-- Navigation Buttons -->
+			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
+				<button class="btn btn-outline-secondary mb-2" onclick="navigate('search');">
+					← Go back to search
+				</button>
+				<button class="btn btn-outline-secondary" onclick="navigate('list');">
+					📋 Go to My List
+				</button>
+			</div>
 			<!-- Search Input -->
 			<div class="mb-4 input-group">
 				<input type="text" id="animeSearchInput" class="form-control" placeholder="Search anime..." />
