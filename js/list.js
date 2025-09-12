@@ -31,7 +31,41 @@ function updateFranchiseCards(items) {
             }
         }
     });
+    
+    // Create slider container
+    const sliderWrapper = document.createElement("div");
+    sliderWrapper.className = "d-flex align-items-center gap-2 mb-3";
 
+    // Label
+    const sliderLabel = document.createElement("label");
+    sliderLabel.textContent = "Card size:";
+    sliderLabel.className = "form-label mb-0";
+
+    // Slider input
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = "3";
+    slider.max = "12";
+    slider.value = "6";
+    slider.className = "form-range";
+    slider.style.width = "200px";
+
+    // Display current value
+    const sliderValue = document.createElement("span");
+    sliderValue.textContent = slider.value;
+
+    // Update grid on slider change
+    slider.addEventListener("input", () => {
+        sliderValue.textContent = slider.value;
+        document.documentElement.style.setProperty("--grid-columns", slider.value);
+    });
+
+    // Append slider elements
+    sliderWrapper.appendChild(sliderLabel);
+    sliderWrapper.appendChild(slider);
+    sliderWrapper.appendChild(sliderValue);
+    cardContainer.appendChild(sliderWrapper);
+    
     Object.entries(categories).forEach(([label, entries]) => {
         if (entries.length === 0) return;
 
@@ -61,14 +95,14 @@ function updateFranchiseCards(items) {
             listContainer.appendChild(listGroup);
         } else {
             cardContainer.appendChild(sectionHeader);
-            const row = document.createElement("div");
-            row.className = "row";
+            const grid = document.createElement("div");
+            grid.className = "grid-card-container"; // Use CSS Grid here
 
             entries.forEach(({ item }) => {
-                const card = document.createElement("div");
-                card.className = "col-md-2 mb-2";
+                const cardWrapper = document.createElement("div");
+                cardWrapper.className = "grid-card";
 
-                card.innerHTML = `
+                cardWrapper.innerHTML = `
                     <div class="card shadow-sm h-100">
                         <img src="${item.imageUrl}" class="card-img-top" alt="${item.name}" />
                         <div class="card-body text-center pb-0">
@@ -78,14 +112,14 @@ function updateFranchiseCards(items) {
                     </div>
                 `;
 
-                card.children[0].addEventListener('click', () => {
+                cardWrapper.children[0].addEventListener('click', () => {
                     navigate('details', item.name);
                 });
 
-                row.appendChild(card);
+                grid.appendChild(cardWrapper);
             });
-
-            cardContainer.appendChild(row);
+            
+            cardContainer.appendChild(grid);
         }
     });
 }

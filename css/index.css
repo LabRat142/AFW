@@ -1,6 +1,10 @@
+:root {
+    --grid-columns: 6;
+}
+
 .card-img-top {
 	object-fit: cover;
-	height: 300px;
+	height: calc(100vw / var(--grid-columns) * 1);
 	width: 100%;
 	display: block;
 	margin: 0 auto;
@@ -23,3 +27,15 @@
     border: 3px solid #007bff;
     border-radius: 8px;
 }
+
+.grid-card-container {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), 1fr);
+    gap: 1rem;
+}
+
+.grid-card {
+    display: flex;
+    flex-direction: column;
+}
+
