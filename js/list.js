@@ -2,6 +2,7 @@ var isListView = false;
 var cardSize = 1;
 var colClasses = ["col-md-1 px-1 mb-2", "col-md-2 px-2 mb-2", "col-md-4 px-3 mb-2"];
 var imgHeights = ["150px", "300px", "600px"];
+var titleRows = [1,2,3]
 
 //--- Show My List ---//
 function updateFranchiseCards(items) {
@@ -87,7 +88,7 @@ function updateFranchiseCards(items) {
                     <div class="card shadow-sm h-100">
                         <img src="${item.imageUrl}" class="card-img-top" style="height:${imgHeights[cardSize]}" alt="${item.name}" />
                         <div class="card-body text-center pb-0">
-                            <h5 class="card-title">${item.name}</h5>
+                            <h5 class="card-title" style="-webkit-line-clamp: ${titleRows[cardSize]};">${item.name}</h5>
                         </div>
                         <p class="text-muted text-center mb-2">Episodes: ${item.content.reduce((sum, item) => sum + (item.episodes || 0), 0)}</p>
                     </div>
