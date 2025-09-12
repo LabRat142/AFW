@@ -2,7 +2,7 @@ var isListView = false;
 var cardSize = 1;
 var colClasses = ["col-md-1 px-1 mb-2", "col-md-2 px-2 mb-2", "col-md-4 px-3 mb-2"];
 var imgHeights = ["150px", "300px", "600px"];
-var titleRows = [1,2,3]
+var titleRows = [2,3,4]
 
 //--- Show My List ---//
 function updateFranchiseCards(items) {
