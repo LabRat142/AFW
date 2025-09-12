@@ -79,7 +79,8 @@ function updateFranchiseCards(items) {
 
             entries.forEach(({ item }) => {
                 const card = document.createElement("div");
-                card.className = "card-wrapper col-md-2 px-2 mb-2";
+                var colClass = getColClass();
+                card.className = `card-wrapper ${colClass}`;
 
                 card.innerHTML = `
                     <div class="card shadow-sm h-100">
@@ -183,18 +184,7 @@ function toggleCardSize() {
     var cards = document.getElementsByClassName('card-wrapper');
     var imgHeights = ["150px", "300px", "600px"];
     
-    var colClass = "";
-    switch (cardSize) {
-        case 0:
-            colClass = "col-md-1 px-1 mb-2";
-            break;
-        case 1:
-            colClass = "col-md-2 px-2 mb-2";
-            break;
-        case 2:
-            colClass = "col-md-4 px-3 mb-2";
-            break;
-    }
+    var colClass = getColClass();
 
     for (let card of cards) {
         card.className = `card-wrapper ${colClass}`;
@@ -203,5 +193,19 @@ function toggleCardSize() {
             img.style.height = imgHeights[cardSize];
             img.style.objectFit = "cover"; // Optional: keeps aspect ratio clean
         }
+    }
+}
+
+function getColClass(){
+    switch (cardSize) {
+        case 0:
+            return "col-md-1 px-1 mb-2";
+            break;
+        case 1:
+            return "col-md-2 px-2 mb-2";
+            break;
+        case 2:
+            return "col-md-4 px-3 mb-2";
+            break;
     }
 }
