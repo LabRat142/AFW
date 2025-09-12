@@ -1,5 +1,7 @@
 var isListView = false;
 var cardSize = 1;
+var colClasses = ["col-md-1 px-1 mb-2", "col-md-2 px-2 mb-2", "col-md-4 px-3 mb-2"];
+var imgHeights = ["150px", "300px", "600px"];
 
 //--- Show My List ---//
 function updateFranchiseCards(items) {
@@ -79,12 +81,11 @@ function updateFranchiseCards(items) {
 
             entries.forEach(({ item }) => {
                 const card = document.createElement("div");
-                var colClass = getColClass();
-                card.className = `card-wrapper ${colClass}`;
+                card.className = `card-wrapper ${colClasses[cardSize]}`;
 
                 card.innerHTML = `
                     <div class="card shadow-sm h-100">
-                        <img src="${item.imageUrl}" class="card-img-top" alt="${item.name}" />
+                        <img src="${item.imageUrl}" class="card-img-top" style="height:${imgHeights[cardSize]}" alt="${item.name}" />
                         <div class="card-body text-center pb-0">
                             <h5 class="card-title">${item.name}</h5>
                         </div>
@@ -181,31 +182,5 @@ function toggleViewMode() {
 function toggleCardSize() {
     cardSize = (cardSize+1)%3
     
-    var cards = document.getElementsByClassName('card-wrapper');
-    var imgHeights = ["150px", "300px", "600px"];
-    
-    var colClass = getColClass();
-
-    for (let card of cards) {
-        card.className = `card-wrapper ${colClass}`;
-        const img = card.querySelector(".card-img-top");
-        if (img) {
-            img.style.height = imgHeights[cardSize];
-            img.style.objectFit = "cover"; // Optional: keeps aspect ratio clean
-        }
-    }
-}
-
-function getColClass(){
-    switch (cardSize) {
-        case 0:
-            return "col-md-1 px-1 mb-2";
-            break;
-        case 1:
-            return "col-md-2 px-2 mb-2";
-            break;
-        case 2:
-            return "col-md-4 px-3 mb-2";
-            break;
-    }
+    updateFranchiseCards(franchises)
 }
