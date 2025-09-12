@@ -1,4 +1,5 @@
 var isListView = false;
+var cardSize = 1;
 
 //--- Show My List ---//
 function updateFranchiseCards(items) {
@@ -12,6 +13,7 @@ function updateFranchiseCards(items) {
     listContainer.style.display = isListView ? "block" : "none";
 	
 	document.getElementById("toggleViewBtn").innerText = isListView ? "📋" : "🖼"
+    
 
     const categories = {
         Completed: [],
@@ -31,49 +33,26 @@ function updateFranchiseCards(items) {
             }
         }
     });
-    
-    // Create slider container
-    const sliderWrapper = document.createElement("div");
-    sliderWrapper.className = "d-flex align-items-center gap-2 mb-3";
 
-    // Label
-    const sliderLabel = document.createElement("label");
-    sliderLabel.textContent = "Card size:";
-    sliderLabel.className = "form-label mb-0";
-
-    // Slider input
-    const slider = document.createElement("input");
-    slider.type = "range";
-    slider.min = "3";
-    slider.max = "12";
-    slider.value = "6";
-    slider.className = "form-range";
-    slider.style.width = "200px";
-
-    // Display current value
-    const sliderValue = document.createElement("span");
-    sliderValue.textContent = slider.value;
-
-    // Update grid on slider change
-    slider.addEventListener("input", () => {
-        sliderValue.textContent = slider.value;
-        document.documentElement.style.setProperty("--grid-columns", slider.value);
-    });
-
-    // Append slider elements
-    sliderWrapper.appendChild(sliderLabel);
-    sliderWrapper.appendChild(slider);
-    sliderWrapper.appendChild(sliderValue);
-    cardContainer.appendChild(sliderWrapper);
-    
     Object.entries(categories).forEach(([label, entries]) => {
         if (entries.length === 0) return;
 
         entries.sort((a, b) => a.item.name.localeCompare(b.item.name));
 
         const sectionHeader = document.createElement("h4");
-        sectionHeader.className = "text-secondary fw-bold mt-4 mb-2";
-        sectionHeader.textContent = `📁 ${label}`;
+        sectionHeader.className = "text-secondary fw-bold mt-4 mb-2 d-flex justify-content-between align-items-center";
+        const headerLabel = document.createElement("span");
+        headerLabel.textContent = `📁 ${label}`;
+        sectionHeader.appendChild(headerLabel);
+        
+        if (!isListView && cardContainer.childElementCount === 0) {
+            const toggleSizeBtn = document.createElement("button");
+            toggleSizeBtn.className = "btn btn-sm btn-outline-secondary";
+            toggleSizeBtn.textContent = "↔️ Resize";
+            toggleSizeBtn.onclick = toggleCardSize;
+
+            sectionHeader.appendChild(toggleSizeBtn);
+        }
 
         if (isListView) {
             listContainer.appendChild(sectionHeader);
@@ -95,14 +74,14 @@ function updateFranchiseCards(items) {
             listContainer.appendChild(listGroup);
         } else {
             cardContainer.appendChild(sectionHeader);
-            const grid = document.createElement("div");
-            grid.className = "grid-card-container"; // Use CSS Grid here
+            const row = document.createElement("div");
+            row.className = "row";
 
             entries.forEach(({ item }) => {
-                const cardWrapper = document.createElement("div");
-                cardWrapper.className = "grid-card";
+                const card = document.createElement("div");
+                card.className = "card-wrapper col-md-2 px-2 mb-2";
 
-                cardWrapper.innerHTML = `
+                card.innerHTML = `
                     <div class="card shadow-sm h-100">
                         <img src="${item.imageUrl}" class="card-img-top" alt="${item.name}" />
                         <div class="card-body text-center pb-0">
@@ -112,14 +91,14 @@ function updateFranchiseCards(items) {
                     </div>
                 `;
 
-                cardWrapper.children[0].addEventListener('click', () => {
+                card.children[0].addEventListener('click', () => {
                     navigate('details', item.name);
                 });
 
-                grid.appendChild(cardWrapper);
+                row.appendChild(card);
             });
-            
-            cardContainer.appendChild(grid);
+
+            cardContainer.appendChild(row);
         }
     });
 }
@@ -196,4 +175,33 @@ function importFranchises(event) {
 function toggleViewMode() {
     isListView = !isListView;
     filterFranchises();
+}
+
+function toggleCardSize() {
+    cardSize = (cardSize+1)%3
+    
+    var cards = document.getElementsByClassName('card-wrapper');
+    var imgHeights = ["150px", "300px", "500px"];
+    
+    var colClass = "";
+    switch (cardSize) {
+        case 0:
+            colClass = "col-md-1 px-1 mb-2";
+            break;
+        case 1:
+            colClass = "col-md-2 px-2 mb-2";
+            break;
+        case 2:
+            colClass = "col-md-4 px-3 mb-2";
+            break;
+    }
+
+    for (let card of cards) {
+        card.className = `card-wrapper ${colClass}`;
+        const img = card.querySelector(".card-img-top");
+        if (img) {
+            img.style.height = imgHeights[cardSize];
+            img.style.objectFit = "cover"; // Optional: keeps aspect ratio clean
+        }
+    }
 }
