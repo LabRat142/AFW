@@ -181,7 +181,7 @@ function toggleCardSize() {
     cardSize = (cardSize+1)%3
     
     var cards = document.getElementsByClassName('card-wrapper');
-    var imgHeights = ["150px", "300px", "500px"];
+    var imgHeights = ["150px", "300px", "600px"];
     
     var colClass = "";
     switch (cardSize) {
