@@ -24,7 +24,7 @@
     border-radius: 8px;
 }
 
-.card-title {
+#list .card-title {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
