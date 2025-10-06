@@ -38,6 +38,7 @@ function navigate(page, id) {
 		case "search":
 			const searchInput = document.getElementById("searchInput");
 			if (searchInput) { searchInput.focus(); }
+			fetchItems();
 			break;
 		case "relations":
 			queue.push(id);

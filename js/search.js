@@ -1,8 +1,9 @@
 //--- Anime Search Function ---//
 function fetchItems(){
 	const query = document.getElementById("animeSearchInput").value.trim();
-	if (!query) return;
-	const endpoint = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}`;
+    const endpoint = query
+        ? `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}`
+        : `https://api.jikan.moe/v4/anime?order_by=popularity`;
 	const search_items = [];
 	
 	fetch(endpoint)
