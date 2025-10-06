@@ -9,8 +9,16 @@ function fetchItems(){
 	fetch(endpoint)
 		.then(res => res.json())
 		.then(data => {
+			let foundTop = false;
 			data.data.forEach(item => {
-				if (item.type!="CM" && item.type!="Music"){
+				if (!query && !foundTop) {
+					if (item.popularity === 1) {
+						foundTop = true;
+					} else {
+						return; // skip until popularity: 1 is found
+					}
+				}
+				if (item.type !== "CM" && item.type !== "Music") {
 					search_items.push({
 						id: item.mal_id,
 						name: item.title_english || item.title,
