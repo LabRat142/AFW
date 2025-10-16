@@ -1,38 +1,64 @@
 //--- Filter Missing Relations ---//
 async function recalcFranchises() {
+    document.getElementById("recalc-changelog").innerHTML = "";
+
     for (const franchise of franchises) {
-		if (stop) break;
-		
+        if (stop) break;
+
         const fName = franchise.name;
+        document.getElementById("recalc-status").innerText = `🔍 Checking: ${fName}...`;
+
         const franchiseIds = new Set(franchise.content.map(item => item.id));
-		console.log(fName);
+        const originalContent = [...franchise.content]; // Clone for comparison
         recalc_queue.push(franchise.content[0].id);
         await recalcProcessQueue();
-		
+
         const frels = recalc_relations;
         recalc_relations = [];
         recalc_seenIds = new Set();
         recalc_queue = [];
-        
-        for (const anime of frels){
+
+        const updatedItems = [];
+        const removedItems = [];
+
+        // Update existing entries
+        for (const anime of frels) {
             const existing = franchise.content.find(item => item.id === anime.id);
-            if (existing && existing.name !== anime.name) {
-                console.log("%c Updated name of " + existing.name + " -> " + anime.name, "color:lime");
-                existing.name = anime.name;
-            }
-            if (existing && existing.episodes !== anime.episodes) {
-                console.log("%c Updated episodes of " + existing.name + ": " + existing.episodes + " -> " + anime.episodes, "color:lime");
-                existing.episodes = anime.episodes;
-            }
-            if (existing && existing.image !== anime.image) {
-                console.log("%c Updated image of " + existing.name + ": " + existing.image + " -> " + anime.image, "color:lime");
-                existing.image = anime.image;
+            if (existing) {
+                if (existing.name !== anime.name) {
+                    updatedItems.push(`📝 Renamed: <b>${existing.name}</b> → <b>${anime.name}</b>`);
+                    existing.name = anime.name;
+             }
+                if (existing.episodes !== anime.episodes) {
+                    updatedItems.push(`📺 Episodes updated for <b>${existing.name}</b>: ${existing.episodes} → ${anime.episodes}`);
+                    existing.episodes = anime.episodes;
+                }
+                if (existing.image !== anime.image) {
+                    updatedItems.push(`🖼️ Image updated for <b>${existing.name}</b>`);
+                    existing.image = anime.image;
+                }
             }
         }
-		
+
+        // Remove entries no longer in Jikan
+        /*
+        const currentIds = new Set(frels.map(item => item.id));
+        franchise.content = franchise.content.filter(item => {
+            const keep = currentIds.has(item.id);
+            if (!keep) {
+                removedItems.push(`❌ Removed: <b>${item.name}</b>`);
+            }
+            return keep;
+        });
+        */
+
+        // Add new entries
         const filteredRels = frels.filter(rel => !franchiseIds.has(rel.id));
         franchiseRelations[fName] = filteredRels;
-		updateRecalcCards(franchiseRelations);
+        updateRecalcCards(franchiseRelations);
+
+        // Display changes
+        displayChangeLog(fName, updatedItems, removedItems);
     }
 	
     document.getElementById("recalc-addAnimeBtn").disabled = false;
@@ -91,9 +117,9 @@ function updateRecalcCards(items){
 
         entries.sort((a, b) => a.name.localeCompare(b.name));
 
-        const sectionHeader = document.createElement("h4");
-        sectionHeader.className = "text-secondary fw-bold mt-4 mb-2";
-        sectionHeader.textContent = `📁 ${fName}`;
+        const sectionHeader = document.createElement("h5");
+        sectionHeader.className = "text-info fw-bold mb-2";
+        sectionHeader.innerHTML = `📁 New in <span class="text-primary">${fName}</span>`;
         cardContainer.appendChild(sectionHeader);
 
         const row = document.createElement("div");
@@ -101,7 +127,7 @@ function updateRecalcCards(items){
 
         entries.forEach(item => {
             const card = document.createElement("div");
-            card.className = "col-md-2 mb-2";
+            card.className = "col-md-4 mb-4";
 
             card.innerHTML = `
                 <div class="card shadow-sm h-100">
@@ -118,6 +144,34 @@ function updateRecalcCards(items){
         cardContainer.appendChild(row);
     });
 }
+
+function displayChangeLog(franchiseName, updates, removals) {
+    if (updates.length === 0 && removals.length === 0) return;
+
+    const container = document.getElementById("recalc-changelog");
+    const section = document.createElement("div");
+    section.className = "mb-4";
+
+    const header = document.createElement("h5");
+    header.className = "text-info fw-bold";
+    header.innerHTML = `🔄 Changes in <span class="text-primary">${franchiseName}</span>`;
+    section.appendChild(header);
+
+    const list = document.createElement("ul");
+    list.className = "list-unstyled";
+
+    [...updates, ...removals].forEach(change => {
+        const item = document.createElement("li");
+        item.className = "mb-1";
+        item.innerHTML = change;
+        list.appendChild(item);
+    });
+
+    section.appendChild(list);
+    container.appendChild(section);
+}
+
+
 
 //--- Update All Franchises ---//
 function updateFranchises() {

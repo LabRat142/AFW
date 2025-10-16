@@ -56,10 +56,13 @@
 				</button>
 			</div>
 			<!-- Search Input -->
-			<div class="mb-4 input-group">
+			<div class="mb-1 input-group">
 				<input type="text" id="animeSearchInput" class="form-control" placeholder="Search anime..." />
 				<button class="btn btn-primary" onclick="fetchItems()">Search</button>
 			</div>
+			<p class="text-muted small mb-4 text-center">
+				💡 Tip: For best results, choose <strong>Season 1</strong> or the original entry of a show.
+			</p>
 			<!-- Search Results -->
 			<div class="row" id="SearchCardContainer"></div>
 		</div>
@@ -70,10 +73,10 @@
 		<div class="container py-4 position-relative">
 			<!-- Navigation Buttons -->
 			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
-				<button class="btn btn-outline-secondary mb-2" onclick="navigate('search');">
+				<button class="btn btn-outline-secondary mb-2" onclick="confirmNavigate('search');">
 					← Go back to search
 				</button>
-				<button class="btn btn-outline-secondary" onclick="navigate('list');">
+				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">
 					📋 Go to My List
 				</button>
 			</div>
@@ -156,7 +159,7 @@
 		<div class="container py-4 position-relative">
 			<!-- Navigation Buttons -->
 			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
-				<button class="btn btn-outline-secondary" onclick="navigate('list');">
+				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">
 					📋 Go to My List
 				</button>
 			</div>
@@ -165,12 +168,28 @@
 				<img id="recalc-loading-img" src="./images/loading.gif" class="mb-3" style="width:160px; height:160px;" alt="Loading..." />
 				<h4 id="recalc-info-title" class="text-primary fw-semibold mb-2">Loading ...</h4>
 				<p class="text-muted text-center mb-3" style="max-width: 400px;">
-					As anime titles load, missing entries will appear below. Clicking the button will update your existing franchises with the latest details and add any new titles.
+					As anime titles load, missing entries will appear in the left and edited entires will appear on the right. Clicking the button will apply these changes to your list. This might take a while depending on how many franchises you have saved.
 				</p>
 				<button id="recalc-addAnimeBtn" class="btn btn-lg btn-success px-4" disabled onclick="updateFranchises()">♥️ Update Franchises</button>
 			</div>
 			<!-- Results -->
-			<div class="row" id="RecalcCardContainer"></div>
+				<!-- Status -->
+				<div id="recalc-status" class="text-muted mb-3 text-center fs-5"></div>
+
+				<!-- Two-column layout -->
+				<div class="row">
+					<!-- Left: Franchise Cards -->
+					<div class="col-lg-7 mb-4">
+						<h3 class="text-secondary fw-bold mb-3">🆕 New Titles in Franchises</h5>
+						<div id="RecalcCardContainer" class="row"></div>
+					</div>
+
+					<!-- Right: Changelog -->
+					<div class="col-lg-5">
+						<h3 class="text-secondary fw-bold mb-3">📋 Changes & Updates</h5>
+						<div id="recalc-changelog" class="border rounded p-3 bg-light"></div>
+					</div>
+				</div>
 		</div>
 	</div>
 </body>

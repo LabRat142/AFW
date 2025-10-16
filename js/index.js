@@ -62,6 +62,12 @@ function navigate(page, id) {
 	}
 }
 
+function confirmNavigate(page, message = "Are you sure you want to leave this page?") {
+    if (confirm(message)) {
+        navigate(page);
+    }
+}
+
 // delete unused data
 function resetVariables(){
 	//search
