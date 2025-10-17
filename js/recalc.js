@@ -203,7 +203,7 @@ function updateFranchises() {
 
                 // If both have date and episode, sort by date
                 return new Date(a.date) - new Date(b.date);
-            }
+            })
         }
     });
 	localStorage.setItem("franchises", JSON.stringify(franchises));
