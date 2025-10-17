@@ -208,6 +208,7 @@ function updateFranchises() {
     });
 	localStorage.setItem("franchises", JSON.stringify(franchises));
 	alert("Franchises updated successfully!");
+    navigate("list");
 }
 
 // async function updateAnimeWithData() {
