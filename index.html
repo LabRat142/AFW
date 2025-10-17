@@ -51,20 +51,16 @@
 		<div class="container py-4">
 			<!-- Navigation Buttons -->
 			<div class="top-0 end-0 my-2 d-flex justify-content-end">
-				<button class="btn btn-outline-secondary" onclick="navigate('list');">
-					📋 Go to List
-				</button>
+				<button class="btn btn-outline-secondary" onclick="navigate('list');">📋 Go to List</button>
 			</div>
 			<!-- Search Input -->
 			<div class="mb-1 input-group">
-				<input type="text" id="animeSearchInput" class="form-control" placeholder="Search anime..." />
+				<input id="animeSearchInput" class="form-control" type="text" placeholder="Search anime..." />
 				<button class="btn btn-primary" onclick="fetchItems()">Search</button>
 			</div>
-			<p class="text-muted small mb-4 text-center">
-				💡 Tip: For best results, choose <strong>Season 1</strong> or the original entry of a show.
-			</p>
+			<p class="text-muted small mb-4 text-center">💡 Tip: For best results, choose <strong>Season 1</strong> or the original entry of a show.</p>
 			<!-- Search Results -->
-			<div class="row" id="SearchCardContainer"></div>
+			<div id="SearchCardContainer" class="row"></div>
 		</div>
 	</div>
 	
@@ -73,24 +69,18 @@
 		<div class="container py-4 position-relative">
 			<!-- Navigation Buttons -->
 			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
-				<button class="btn btn-outline-secondary mb-2" onclick="confirmNavigate('search');">
-					← Go back to search
-				</button>
-				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">
-					📋 Go to My List
-				</button>
+				<button class="btn btn-outline-secondary mb-2" onclick="confirmNavigate('search');">← Go back to search</button>
+				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">📋 Go to My List</button>
 			</div>
 			<!-- Info -->
 			<div class="d-flex flex-column align-items-center mb-4">
-				<img id="loading-img" src="./images/loading.gif" class="mb-3" style="width:160px; height:160px;" alt="Loading..." />
+				<img id="loading-img" class="mb-3" src="./images/loading.gif" style="width:160px; height:160px;" alt="Loading..." />
 				<h4 id="info-title" class="text-primary fw-semibold mb-2">Loading your franchise...</h4>
-				<p class="text-muted text-center mb-3" style="max-width: 400px;">
-					Once loading is complete, click on one of the anime cards below to select a cover image. Then press the button to save your franchise.
-				</p>
+				<p class="text-muted text-center mb-3" style="max-width: 400px;">Once loading is complete, click on one of the anime cards below to select a cover image. Then press the button to save your franchise.</p>
 				<button id="addAnimeBtn" class="btn btn-lg btn-success px-4" disabled onclick="addFranchise()">♥️ Save Franchise</button>
 			</div>
 			<!-- Results -->
-			<div class="row" id="RelationsCardContainer"></div>
+			<div id="RelationsCardContainer" class="row"></div>
 		</div>
 	</div>
 	
@@ -131,11 +121,12 @@
 		<div class="container py-4">
 			<!-- Navigation Button -->
 			<button class="btn btn-outline-secondary mb-3" onclick="navigate('list')">← Back to List</button>
-			
+			<!-- Info -->
 			<div class="row">
 				<!-- Left: Franchise Info -->
 				<div class="col-md-4 text-center">
-					<img id="checkmark-image" class="img-fluid m-1" src="./images/unchecked.png" style="position:absolute; height:50px; width:50px;" onclick="markCompleted()">
+					<img id="checkmark-image" class="img-fluid m-1" src="./images/unchecked.png" style="position:absolute; height:50px; width:50px; cursor: pointer;" 
+						onclick="markCompleted()" title="Mark as completed">
 					<img id="details-image" class="img-fluid rounded shadow mb-3" style="max-height: 300px;" alt="Franchise Cover" />
 					<h3 id="details-name" class="text-primary fw-bold"></h3>
 					<p id="details-completion" class="text-muted text-center mb-3">Not Completed</p>
@@ -159,9 +150,7 @@
 		<div class="container py-4 position-relative">
 			<!-- Navigation Buttons -->
 			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
-				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">
-					📋 Go to My List
-				</button>
+				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">📋 Go to My List</button>
 			</div>
 			<!-- Info -->
 			<div class="d-flex flex-column align-items-center mb-4">
@@ -175,10 +164,9 @@
 			<!-- Results -->
 				<!-- Status -->
 				<div id="recalc-status" class="text-muted mb-3 text-center fs-5"></div>
-
-				<!-- Two-column layout -->
+				<!-- Changes -->
 				<div class="row">
-					<!-- Left: Franchise Cards -->
+					<!-- Left: Missing Anime -->
 					<div class="col-lg-7 mb-4">
 						<h3 class="text-secondary fw-bold mb-3">🆕 New Titles in Franchises</h5>
 						<div id="RecalcCardContainer" class="row"></div>
