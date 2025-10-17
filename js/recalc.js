@@ -28,7 +28,7 @@ async function recalcFranchises() {
                 if (existing.name !== anime.name) {
                     updatedItems.push(`📝 Renamed: <b>${existing.name}</b> → <b>${anime.name}</b>`);
                     existing.name = anime.name;
-             }
+                }
                 if (existing.episodes !== anime.episodes) {
                     updatedItems.push(`📺 Episodes updated for <b>${existing.name}</b>: ${existing.episodes} → ${anime.episodes}`);
                     existing.episodes = anime.episodes;
@@ -37,11 +37,14 @@ async function recalcFranchises() {
                     updatedItems.push(`🖼️ Image updated for <b>${existing.name}</b>`);
                     existing.image = anime.image;
                 }
+                if (existing.date !== anime.date) {
+                    updatedItems.push(`📅 Date updated for <b>${existing.name}</b>: ${existing.date || "none"} → ${anime.date}`);
+                    existing.date = anime.date;
+                }
             }
         }
 
         // Remove entries no longer in Jikan
-        /*
         const currentIds = new Set(frels.map(item => item.id));
         franchise.content = franchise.content.filter(item => {
             const keep = currentIds.has(item.id);
@@ -50,7 +53,6 @@ async function recalcFranchises() {
             }
             return keep;
         });
-        */
 
         // Add new entries
         const filteredRels = frels.filter(rel => !franchiseIds.has(rel.id));
@@ -86,7 +88,8 @@ async function recalcProcessQueue(){
                     name: detail.title_english || detail.title,
                     image: detail.images?.jpg?.image_url || "placeholder.jpg",
                     watched: false,
-					episodes: detail.episodes
+					episodes: detail.episodes,
+                    date: detail.aired.from
                 });
             }
 
@@ -185,6 +188,21 @@ function updateFranchises() {
             const newItems = extraContent.filter(item => !existingIds.has(item.id));
 
             franchise.content.push(...newItems);
+            
+            franchise.content = [...relations].sort((a, b) => {
+                const hasDateA = !!a.date;
+                const hasDateB = !!b.date;
+                const hasEpA = !!a.episode;
+                const hasEpB = !!b.episode;
+
+                // Prioritize items with both date and episode
+                if (!hasDateA && !hasDateB && !hasEpA && !hasEpB) return 0;
+                if (!hasDateA || !hasEpA) return 1;
+                if (!hasDateB || !hasEpB) return -1;
+
+                // If both have date and episode, sort by date
+                return new Date(a.date) - new Date(b.date);
+            }
         }
     });
 	localStorage.setItem("franchises", JSON.stringify(franchises));
@@ -208,3 +226,4 @@ function updateFranchises() {
         // }
     // }
 // }
+

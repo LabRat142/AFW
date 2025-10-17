@@ -22,7 +22,8 @@ async function processQueue() {
                     name: detail.title_english || detail.title,
                     image: detail.images?.jpg?.image_url || "placeholder.jpg",
                     watched: false,
-					episodes: detail.episodes
+					episodes: detail.episodes,
+					date: detail.aired.from
                 });
                 updateRelationsCards(relations);
             }
@@ -91,7 +92,20 @@ function addFranchise() {
 
 	const selectedItem = relations[selectedImageIndex];
 
-	const sortedItems = [...relations].sort((a, b) => a.name.localeCompare(b.name));
+	const sortedItems = [...relations].sort((a, b) => {
+		const hasDateA = !!a.date;
+		const hasDateB = !!b.date;
+		const hasEpA = !!a.episode;
+		const hasEpB = !!b.episode;
+
+		// Prioritize items with both date and episode
+		if (!hasDateA && !hasDateB && !hasEpA && !hasEpB) return 0;
+		if (!hasDateA || !hasEpA) return 1;
+		if (!hasDateB || !hasEpB) return -1;
+
+		// If both have date and episode, sort by date
+		return new Date(a.date) - new Date(b.date);
+	});
 
 	const franchise = {
 		name: name,
