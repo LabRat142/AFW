@@ -63,6 +63,7 @@ async function recalcFranchises() {
         displayChangeLog(fName, updatedItems, removedItems);
     }
 	
+    document.getElementById("recalc-status").innerText = "";
     document.getElementById("recalc-addAnimeBtn").disabled = false;
     document.getElementById("recalc-loading-img").src = "./images/done.gif";
     document.getElementById("recalc-info-title").innerText = "Ready!";
