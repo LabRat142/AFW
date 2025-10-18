@@ -190,7 +190,7 @@ function updateFranchises() {
 
             franchise.content.push(...newItems);
             
-            franchise.content = [...relations].sort((a, b) => {
+            franchise.content = [...franchise.content].sort((a, b) => {
                 const hasDateA = !!a.date;
                 const hasDateB = !!b.date;
                 const hasEpA = !!a.episode;
