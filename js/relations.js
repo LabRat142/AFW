@@ -95,13 +95,11 @@ function addFranchise() {
 	const sortedItems = [...relations].sort((a, b) => {
 		const hasDateA = !!a.date;
 		const hasDateB = !!b.date;
-		const hasEpA = !!a.episode;
-		const hasEpB = !!b.episode;
 
 		// Prioritize items with both date and episode
-		if (!hasDateA && !hasDateB && !hasEpA && !hasEpB) return 0;
-		if (!hasDateA || !hasEpA) return 1;
-		if (!hasDateB || !hasEpB) return -1;
+		if (!hasDateA && !hasDateB) return 0;
+		if (!hasDateA) return 1;
+		if (!hasDateB) return -1;
 
 		// If both have date and episode, sort by date
 		return new Date(a.date) - new Date(b.date);
