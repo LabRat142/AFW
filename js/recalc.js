@@ -2,11 +2,12 @@
 async function recalcFranchises() {
     document.getElementById("recalc-changelog").innerHTML = "";
 
-    for (const franchise of franchises) {
+    for (let i = 0; i < franchises.length; i++) {
+        let franchise = franchises[i];
         if (stop) break;
 
         const fName = franchise.name;
-        document.getElementById("recalc-status").innerText = `🔍 Checking: ${fName}...`;
+        document.getElementById("recalc-status").innerText = `🔍 Checking: ${fName}... (${i+1}/${franchises.length})`;
 
         const franchiseIds = new Set(franchise.content.map(item => item.id));
         const originalContent = [...franchise.content]; // Clone for comparison
@@ -210,20 +211,20 @@ function updateFranchises() {
 }
 
 // async function updateAnimeWithData() {
-    // for (const franchise of franchises) {
-        // for (let i = 0; i < franchise.content.length; i++) {
-            
-            // const anime = franchise.content[i];
-			
-			// await delay(1000);
-            // try {
-                // const res = await fetch(`https://api.jikan.moe/v4/anime/${anime.id}`);
-                // const data = await res.json();
-                // franchise.content[i].??? = data.data.???;
-            // } catch (err) {
-                // console.error(`Failed to fetch episodes for ${anime.id}`, err);
-            // }
-        // }
-    // }
+//     for (const franchise of franchises) {
+//         for (let i = 0; i < franchise.content.length; i++) {
+//
+//             const anime = franchise.content[i];
+//
+// 			await delay(1000);
+//             try {
+//                 const res = await fetch(`https://api.jikan.moe/v4/anime/${anime.id}`);
+//                 const data = await res.json();
+//                 franchise.content[i].??? = data.data.???;
+//             } catch (err) {
+//                 console.error(`Failed to fetch episodes for ${anime.id}`, err);
+//             }
+//         }
+//     }
 // }
 
