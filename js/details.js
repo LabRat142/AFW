@@ -31,7 +31,11 @@ function loadDetails(name) {
                     <img src="${anime.image}" alt="${anime.name}" style="width: 50px; height: 50px; object-fit: contain;" class="rounded" />
                     <span>${anime.name}</span>
                 </div>
-                <span class="text-muted">${anime.episodes ?? '—'} eps</span>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted">${anime.episodes ?? '—'} eps</span>
+                    <div style="border-left: 1px solid #ccc; height: 24px;"></div>
+                    <a href="https://myanimelist.net/anime/${anime.id}" target="_blank" title="View on MyAnimeList" onclick="event.stopPropagation();" style="text-decoration: none; color: inherit; font-size:1.2rem">🔗</a>
+                </div>
             </div>
         `;
 
