@@ -1,45 +1,50 @@
-//--- Anime Search Function ---//
-function fetchItems(){
-	const query = document.getElementById("animeSearchInput").value.trim();
-    const endpoint = query
-        ? `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}`
-        : `https://api.jikan.moe/v4/anime?order_by=popularity`;
-	const search_items = [];
-	
-	fetch(endpoint)
-		.then(res => res.json())
-		.then(data => {
-			let foundTop = false;
-			data.data.forEach(item => {
-				if (!query && !foundTop) {
-					if (item.popularity === 1) {
-						foundTop = true;
-					} else {
-						return; // skip until popularity: 1 is found
-					}
-				}
-				if (item.type !== "CM" && item.type !== "Music") {
-					search_items.push({
-						id: item.mal_id,
-						name: item.title_english || item.title,
-						image: item.images.jpg.image_url
-					});
-				}
-			});
-			updateSearchCards(search_items);
-		})
-		.catch(err => console.error("Fetch error:", err));
+/**
+ * @author LabRat
+ * @description Functions related to the search page.
+ */
+
+/**
+ * Initialize search page
+ */
+function search_Init(){
+    // Focus on searchbar
+    const searchInput = document.getElementById("animeSearchInput");
+    if (searchInput) { searchInput.focus(); }
+
+    // Fetch and show anime
+    search_FetchItems()
 }
 
-//--- Show Results ---//
-function updateSearchCards(items){
-	const container = document.getElementById("SearchCardContainer");
-	container.innerHTML = ""; // Clear previous cards
-	items.forEach(item => {
-		const card = document.createElement("div");
-		card.className = "col-md-2 mb-2";
+/**
+ * Gets anime list from jikan and presents them to user
+ */
+async function search_FetchItems(){
+    const query = document.getElementById("animeSearchInput").value.trim();
+    AppState.search.anime = await jikan_GetAnimeSearch(query)
 
-		card.innerHTML = `
+    search_UpdateCards(AppState.search.anime);
+}
+
+/**
+ * Presents list of anime to user
+ * @param {Array<Object>} items - list of anime to present on screen
+ */
+function search_UpdateCards(items){
+    const container = document.getElementById("SearchCardContainer");
+    container.innerHTML = ""; // Clear previous cards
+
+    // Show message if no items
+    if (!items.length) {
+        container.innerHTML = "<p>No results found.</p>";
+        return;
+    }
+
+    // Show items
+    items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "col-md-2 mb-2";
+
+        card.innerHTML = `
 			<div class="card h-100">
 				<img src="${item.image}" class="card-img-top mx-auto" alt="${item.name}" />
 				<div class="card-body">
@@ -49,6 +54,6 @@ function updateSearchCards(items){
 			</div>
 		`;
 
-		container.appendChild(card);
-	});
+        container.appendChild(card);
+    });
 }

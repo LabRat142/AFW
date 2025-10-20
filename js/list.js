@@ -1,22 +1,35 @@
-var isListView = false;
-var cardSize = 1;
-var colClasses = ["col-md-1 px-1 mb-2", "col-md-2 px-2 mb-2", "col-md-4 px-3 mb-2"];
-var imgHeights = ["150px", "300px", "600px"];
-var titleRows = [2,3,4]
+/**
+ * @author LabRat
+ * @description Functions related to the list page.
+ */
 
-//--- Show My List ---//
-function updateFranchiseCards(items) {
+const sizeVars = {
+    colClasses: ["col-md-1 px-1 mb-2", "col-md-2 px-2 mb-2", "col-md-4 px-3 mb-2"],
+    imgHeights: ["150px", "300px", "600px"],
+    titleRows: [2,3,4]
+}
+
+/**
+ * Initialize List Page
+ */
+function list_Init(){
+    loadMyList();
+    document.getElementById("franchisesSearchInput").value="";
+    list_UpdateCards(AppState.franchises);
+}
+
+function list_UpdateCards(items) {
     const cardContainer = document.getElementById("FranchisesCardContainer");
     const listContainer = document.getElementById("FranchisesListContainer");
 
     cardContainer.innerHTML = "";
     listContainer.innerHTML = "";
 
-    cardContainer.style.display = isListView ? "none" : "block";
-    listContainer.style.display = isListView ? "block" : "none";
-	
-	document.getElementById("toggleViewBtn").innerText = isListView ? "📋" : "🖼"
-    
+    cardContainer.style.display = AppState.list.isListView ? "none" : "block";
+    listContainer.style.display = AppState.list.isListView ? "block" : "none";
+
+    document.getElementById("toggleViewBtn").innerText = AppState.list.isListView ? "📋" : "🖼"
+
 
     const categories = {
         Completed: [],
@@ -47,17 +60,17 @@ function updateFranchiseCards(items) {
         const headerLabel = document.createElement("span");
         headerLabel.textContent = `📁 ${label}`;
         sectionHeader.appendChild(headerLabel);
-        
-        if (!isListView && cardContainer.childElementCount === 0) {
+
+        if (!AppState.list.isListView && cardContainer.childElementCount === 0) {
             const toggleSizeBtn = document.createElement("button");
             toggleSizeBtn.className = "btn btn-sm btn-outline-secondary";
             toggleSizeBtn.textContent = "↔️ Resize";
-            toggleSizeBtn.onclick = toggleCardSize;
+            toggleSizeBtn.onclick = list_ToggleCardSize;
 
             sectionHeader.appendChild(toggleSizeBtn);
         }
 
-        if (isListView) {
+        if (AppState.list.isListView) {
             listContainer.appendChild(sectionHeader);
             const listGroup = document.createElement("div");
             listGroup.className = "list-group";
@@ -82,13 +95,13 @@ function updateFranchiseCards(items) {
 
             entries.forEach(({ item }) => {
                 const card = document.createElement("div");
-                card.className = `card-wrapper ${colClasses[cardSize]}`;
+                card.className = `card-wrapper ${sizeVars.colClasses[AppState.list.cardSize]}`;
 
                 card.innerHTML = `
                     <div class="card shadow-sm h-100">
-                        <img src="${item.imageUrl}" class="card-img-top" style="height:${imgHeights[cardSize]}" alt="${item.name}" />
+                        <img src="${item.imageUrl}" class="card-img-top" style="height:${sizeVars.imgHeights[AppState.list.cardSize]}" alt="${item.name}" />
                         <div class="card-body text-center pb-0">
-                            <h5 class="card-title" style="-webkit-line-clamp: ${titleRows[cardSize]};">${item.name}</h5>
+                            <h5 class="card-title" style="-webkit-line-clamp: ${sizeVars.titleRows[AppState.list.cardSize]};">${item.name}</h5>
                         </div>
                         <p class="text-muted text-center mb-2">Episodes: ${item.content.reduce((sum, item) => sum + (item.episodes || 0), 0)}</p>
                     </div>
@@ -106,17 +119,16 @@ function updateFranchiseCards(items) {
     });
 }
 
-//--- Search Filter ---//
-function filterFranchises() {
+function list_FilterFranchises() {
     const query = document.getElementById("franchisesSearchInput").value.trim().toLowerCase();
     if (!query) {
-        updateFranchiseCards(franchises); // Show all if query is empty
+        list_UpdateCards(AppState.franchises); // Show all if query is empty
         return;
     }
 
     const words = query.split(/\s+/); // Split query into individual words
 
-    const filtered = franchises.filter(franchise => {
+    const filtered = AppState.franchises.filter(franchise => {
         const searchable = [
             franchise.name.toLowerCase(),
             ...franchise.content.map(item => item.name.toLowerCase())
@@ -126,12 +138,12 @@ function filterFranchises() {
         return words.every(word => searchable.includes(word));
     });
 
-    updateFranchiseCards(filtered);
+    list_UpdateCards(filtered);
 }
 
 // Export to json
-function exportFranchises() {
-    const franchises = JSON.parse(localStorage.getItem("franchises") || "[]");
+function list_ExportFranchises() {
+    const franchises = loadFromLocalStorage();
 
     const payload = {
         source: "AnimeFranchiesApp_v1", // Unique identifier
@@ -151,7 +163,7 @@ function exportFranchises() {
 }
 
 // Import from json
-function importFranchises(event) {
+function list_ImportFranchises(event) {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -164,7 +176,8 @@ function importFranchises(event) {
                 throw new Error("Invalid or unrecognized file format.");
             }
 
-            localStorage.setItem("franchises", JSON.stringify(parsed.data));
+            saveToLocalStorage(parsed.data);
+
             alert("Franchises imported successfully!");
             navigate('list')
         } catch (err) {
@@ -175,13 +188,13 @@ function importFranchises(event) {
 }
 
 // Toggle between list and card view
-function toggleViewMode() {
-    isListView = !isListView;
-    filterFranchises();
+function list_ToggleViewMode() {
+    AppState.list.isListView = !AppState.list.isListView;
+    list_FilterFranchises();
 }
 
-function toggleCardSize() {
-    cardSize = (cardSize+1)%3
-    
-    updateFranchiseCards(franchises)
+function list_ToggleCardSize() {
+    AppState.list.cardSize = (AppState.list.cardSize+1)%3
+
+    list_FilterFranchises()
 }

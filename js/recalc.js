@@ -1,23 +1,36 @@
-//--- Filter Missing Relations ---//
-async function recalcFranchises() {
+/**
+ * @author LabRat
+ * @description Functions related to the recalc page.
+ */
+
+/**
+ * Initializes recalc page
+ */
+function recalc_Init(){
+    AppState.stopFetches = false;
+
+    recalc_FetchUpdates();
+}
+
+async function recalc_FetchUpdates() {
     document.getElementById("recalc-changelog").innerHTML = "";
 
-    for (let i = 0; i < franchises.length; i++) {
-        let franchise = franchises[i];
-        if (stop) break;
+    for (let i = 0; i < AppState.franchises.length; i++) {
+        let franchise = AppState.franchises[i];
+        if (AppState.stopFetches) break;
 
         const fName = franchise.name;
-        document.getElementById("recalc-status").innerText = `🔍 Checking: ${fName}... (${i+1}/${franchises.length})`;
+        document.getElementById("recalc-status").innerText = `🔍 Checking: ${fName}... (${i+1}/${AppState.franchises.length})`;
 
         const franchiseIds = new Set(franchise.content.map(item => item.id));
         const originalContent = [...franchise.content]; // Clone for comparison
-        recalc_queue.push(franchise.content[0].id);
-        await recalcProcessQueue();
+        AppState.recalc.queue.push(franchise.content[0].id);
+        await recalc_ProcessQueue();
 
-        const frels = recalc_relations;
-        recalc_relations = [];
-        recalc_seenIds = new Set();
-        recalc_queue = [];
+        const frels = AppState.recalc.relations;
+        AppState.recalc.relations = [];
+        AppState.recalc.seenIds = new Set();
+        AppState.recalc.queue = [];
 
         const updatedItems = [];
         const removedItems = [];
@@ -57,40 +70,40 @@ async function recalcFranchises() {
 
         // Add new entries
         const filteredRels = frels.filter(rel => !franchiseIds.has(rel.id));
-        franchiseRelations[fName] = filteredRels;
-        updateRecalcCards(franchiseRelations);
+        AppState.recalc.franchiseRelations[fName] = filteredRels;
+        recalc_UpdateCards(AppState.recalc.franchiseRelations);
 
         // Display changes
-        displayChangeLog(fName, updatedItems, removedItems);
+        recalc_DisplayChangeLog(fName, updatedItems, removedItems);
     }
-	
+
     document.getElementById("recalc-status").innerText = "";
     document.getElementById("recalc-addAnimeBtn").disabled = false;
     document.getElementById("recalc-loading-img").src = "./images/done.gif";
     document.getElementById("recalc-info-title").innerText = "Ready!";
 }
 
-//--- Recursive Relations Finder Function ---//
-async function recalcProcessQueue(){
-	while (recalc_queue.length > 0) {
-        const aId = recalc_queue.shift();
-        if (recalc_seenIds.has(aId)) continue;
-        recalc_seenIds.add(aId);
+/**
+ * Fetch Franchise Relations Recursively
+ */
+async function recalc_ProcessQueue(){
+    while (AppState.recalc.queue.length > 0) {
+        const aId = AppState.recalc.queue.shift();
+        if (AppState.recalc.seenIds.has(aId)) continue;
+        AppState.recalc.seenIds.add(aId);
 
         try {
             await delay(1000); // Rate limit
-            const res = await fetch(`https://api.jikan.moe/v4/anime/${aId}/full`);
-            const data = await res.json();
-            const detail = data.data;
+            const detail = await jikan_GetAnimeData(aId,"full")
 
             // Skip unwanted types
-            if (!recalc_relations.some(i => i.id === aId) && detail.type !== "CM" && detail.type !== "Music") {
-                recalc_relations.push({
+            if (!AppState.recalc.relations.some(i => i.id === aId) && detail.type !== "CM" && detail.type !== "Music") {
+                AppState.recalc.relations.push({
                     id: detail.mal_id,
                     name: detail.title_english || detail.title,
                     image: detail.images?.jpg?.image_url || "placeholder.jpg",
                     watched: false,
-					episodes: detail.episodes,
+                    episodes: detail.episodes,
                     date: detail.aired.from
                 });
             }
@@ -101,8 +114,8 @@ async function recalcProcessQueue(){
                 if (rel.relation === "Character" || rel.relation === "Other") continue;
 
                 for (const entry of rel.entry) {
-                    if (entry.type === "anime" && !recalc_seenIds.has(entry.mal_id)) {
-                        recalc_queue.push(entry.mal_id);
+                    if (entry.type === "anime" && !AppState.recalc.seenIds.has(entry.mal_id)) {
+                        AppState.recalc.queue.push(entry.mal_id);
                     }
                 }
             }
@@ -112,11 +125,14 @@ async function recalcProcessQueue(){
     }
 }
 
-//--- Show Results ---//
-function updateRecalcCards(items){
-	const cardContainer = document.getElementById("RecalcCardContainer");
+/**
+ * Presents missing anime info to user
+ * @param {Array<Object>} items - list of missing anime to present on screen
+ */
+function recalc_UpdateCards(items){
+    const cardContainer = document.getElementById("RecalcCardContainer");
     cardContainer.innerHTML = "";
-	
+
     Object.entries(items).forEach(([fName, entries]) => {
         if (entries.length === 0) return;
 
@@ -150,7 +166,12 @@ function updateRecalcCards(items){
     });
 }
 
-function displayChangeLog(franchiseName, updates, removals) {
+/**
+ * @param franchiseName
+ * @param updates
+ * @param removals
+ */
+function recalc_DisplayChangeLog(franchiseName, updates, removals) {
     if (updates.length === 0 && removals.length === 0) return;
 
     const container = document.getElementById("recalc-changelog");
@@ -176,13 +197,13 @@ function displayChangeLog(franchiseName, updates, removals) {
     container.appendChild(section);
 }
 
-
-
-//--- Update All Franchises ---//
-function updateFranchises() {
-    franchises.forEach(franchise => {
+/**
+ * Update franchises with the newly discovered updates
+ */
+function recalc_UpdateFranchises() {
+    AppState.franchises.forEach(franchise => {
         const fName = franchise.name;
-        const extraContent = franchiseRelations[fName];
+        const extraContent = AppState.recalc.franchiseRelations[fName];
 
         if (Array.isArray(extraContent)) {
             // Avoid duplicates by checking for existing IDs
@@ -190,7 +211,7 @@ function updateFranchises() {
             const newItems = extraContent.filter(item => !existingIds.has(item.id));
 
             franchise.content.push(...newItems);
-            
+
             franchise.content = [...franchise.content].sort((a, b) => {
                 const hasDateA = !!a.date;
                 const hasDateB = !!b.date;
@@ -203,28 +224,10 @@ function updateFranchises() {
                 // If both have date and episode, sort by date
                 return new Date(a.date) - new Date(b.date);
             })
+            updateFranchiseCompletion(franchise)
         }
     });
-	localStorage.setItem("franchises", JSON.stringify(franchises));
-	alert("Franchises updated successfully!");
+    saveMyList();
+    alert("Franchises updated successfully!");
     navigate("list");
 }
-
-// async function updateAnimeWithData() {
-//     for (const franchise of franchises) {
-//         for (let i = 0; i < franchise.content.length; i++) {
-//
-//             const anime = franchise.content[i];
-//
-// 			await delay(1000);
-//             try {
-//                 const res = await fetch(`https://api.jikan.moe/v4/anime/${anime.id}`);
-//                 const data = await res.json();
-//                 franchise.content[i].??? = data.data.???;
-//             } catch (err) {
-//                 console.error(`Failed to fetch episodes for ${anime.id}`, err);
-//             }
-//         }
-//     }
-// }
-

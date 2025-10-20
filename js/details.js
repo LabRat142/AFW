@@ -1,18 +1,36 @@
-//--- Show Info ---//
-function loadDetails(name) {
-    const selected = franchises.find(f => f.name === name);
+/**
+ * @author LabRat
+ * @description Functions related to the details page.
+ */
+
+/**
+ * Initialize details page
+ */
+function details_Init(franchise_name){
+    details_Load(franchise_name)
+}
+
+/**
+ * Loads all information for the given franchise
+ * @param name - name of the franchise to show details for
+ */
+function details_Load(name) {
+    // Get Franchise
+    const selected = AppState.franchises.find(f => f.name === name);
     if (!selected) return;
 
-    currentFranchiseIndex = franchises.indexOf(selected);
+    // Store index in AppState
+    AppState.details.currentFranchiseIndex = AppState.franchises.indexOf(selected);
 
+    // Load Franchise Info
     document.getElementById("details-image").src = selected.imageUrl;
     document.getElementById("details-name").innerText = selected.name;
     document.getElementById("checkmark-image").src = selected.marked ? "./images/checked.png" : "./images/unchecked.png";
     document.getElementById("details-completion").innerText = selected.completed ? "Completed" : "Not Completed";
-    var totalEpisodes = selected.content.reduce((sum, item) => sum + (item.episodes || 0), 0);
+    let totalEpisodes = selected.content.reduce((sum, item) => sum + (item.episodes || 0), 0);
     document.getElementById("total-episodes").innerText = "Episodes: " + totalEpisodes;
 
-    
+
     // Render anime list
     const list = document.getElementById("details-anime-list");
     list.innerHTML = "";
@@ -40,77 +58,69 @@ function loadDetails(name) {
         `;
 
         item.addEventListener("click", () => {
-            // if not marked and all watched before change, uncompleted
-            if (!selected.marked && selected.content.every(item=>item.watched === true)){
-                selected.completed = false;
-                document.getElementById("details-completion").innerText = "Not Completed";
-            }
-            
             anime.watched = !anime.watched;
             item.classList.toggle("list-group-item-success");
-            
-            // if all true after change to completed
-            if (!selected.marked && selected.content.every(item=>item.watched === true)){
-                selected.completed = true;
-                document.getElementById("details-completion").innerText = "Completed";
-            }
-                
-            // Save updated franchise back to localStorage
-            franchises[index] = selected;
-            localStorage.setItem("franchises", JSON.stringify(franchises));
+
+            updateFranchiseCompletion(AppState.franchises[AppState.details.currentFranchiseIndex]);
+
         });
 
         list.appendChild(item);
     });
 }
 
-// Mark an anime as completed
-function markCompleted(){
-    index = currentFranchiseIndex;
-    const selected = franchises[index];
+/**
+ * Mark currently viewed franchise as completed
+ */
+function details_MarkCompleted(){
+    const index = AppState.details.currentFranchiseIndex;
+    const selected = AppState.franchises[index];
     if (!selected) return;
-    
+
     if (!selected.marked){
         selected.marked = true;
         selected.completed = true;
         document.getElementById("checkmark-image").src = "./images/checked.png"
         document.getElementById("details-completion").innerText = "Completed";
-        franchises[index] = selected;
-        localStorage.setItem("franchises", JSON.stringify(franchises));
     } else {
         selected.marked = false;
         if (selected.content.some(item=>item.watched === false)){
-                selected.completed = false;
+            selected.completed = false;
         }
         document.getElementById("checkmark-image").src = "./images/unchecked.png"
         document.getElementById("details-completion").innerText = "Not Completed";
-        franchises[index] = selected;
-        localStorage.setItem("franchises", JSON.stringify(franchises));
     }
+
+    AppState.franchises[index] = selected;
+    saveMyList();
 }
 
-// Edit the name of the current franchise
-function editFranchiseName() {
-    const index = currentFranchiseIndex;
-    const selected = franchises[index];
-    
+/**
+ * Edit the name of the currently viewed franchise
+ */
+function details_EditFranchiseName() {
+    const index = AppState.details.currentFranchiseIndex;
+    const selected = AppState.franchises[index];
+
     const newName = prompt("Enter a new name for this franchise:", selected.name);
     if (newName && newName.trim()) {
         selected.name = newName.trim();
-        franchises[index] = selected;
-        localStorage.setItem("franchises", JSON.stringify(franchises));
+        AppState.franchises[index] = selected;
+        saveMyList();
         document.getElementById("details-name").innerText = selected.name;
     }
 }
 
-// Delete current franchise
-function deleteFranchise() {
-    const index = currentFranchiseIndex;
-    const selected = franchises[index];
+/**
+ * Delete the currently viewed franchise
+ */
+function details_DeleteFranchise() {
+    const index = AppState.currentFranchiseIndex;
+    const selected = AppState.franchises[index];
 
     if (confirm(`Are you sure you want to delete "${selected.name}" from your list?`)) {
-        franchises.splice(index, 1);
-        localStorage.setItem("franchises", JSON.stringify(franchises));
+        AppState.franchises.splice(index, 1);
+        saveMyList();
         navigate('list');
     }
 }
