@@ -23,7 +23,7 @@ No installation needed - just open the link and start exploring anime relations,
 ## Usage Instructions
 The app consists of two sections:
 - Search section - searching for anime and related titles
-- List section: Viewing and updating your current list of franchises
+- List section - Viewing and updating your current list of franchises
 
 1. Search section
 - Use the search bar to look up anime titles by name.
