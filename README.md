@@ -6,7 +6,7 @@ Anime Franchises Watchlist (AFW) is a single-page web app that helps you explore
 - Interactive card view with auto-selection and visual feedback
 - Track watched status per title and auto-detect franchise completion
 - Saving franchises in browser storage with persistent state
-- Exporting and Importing of frachise lists for easy transfer.
+- Exporting and Importing of franchise lists for easy transfer.
 
 ## Built With
 - Vanilla JavaScript (modular structure)
@@ -16,6 +16,6 @@ Anime Franchises Watchlist (AFW) is a single-page web app that helps you explore
 
 ## Live Demo
 You can try the app directly in your browser:
-[Anime Franchises Watchlist](https://labrat142.github.io/AFW/)
+👉 [Anime Franchises Watchlist](https://labrat142.github.io/AFW/)
 
 No installation needed—just open the link and start exploring anime relations, building franchises, and tracking your watch progress.
