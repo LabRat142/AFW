@@ -76,8 +76,8 @@ function resetAppState(){
             selectedImageIndex: null
         },
         list: {
-            isListView: false,
-            cardSize: 1,
+            isListView: AppState.list.isListView,
+            cardSize: AppState.list.cardSize,
         },
         details: {
             currentFranchiseIndex: null,
