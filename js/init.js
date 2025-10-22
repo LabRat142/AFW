@@ -4,7 +4,32 @@
  */
 
 // Global Variables
-let AppState = {}
+let AppState = {
+    franchises: [],
+    stopFetches: true,
+    search: {
+        anime: []
+    },
+    relations: {
+        seenIds: new Set(),
+        queue: [],
+        anime: [],
+        selectedImageIndex: null
+    },
+    list: {
+        isListView: false,
+        cardSize: 1,
+    },
+    details: {
+        currentFranchiseIndex: null,
+    },
+    recalc: {
+        relations: [],
+        seenIds: new Set(),
+        queue: [],
+        franchiseRelations: {}
+    }
+}
 
 // Start App when DOM loads
 document.addEventListener("DOMContentLoaded", function () {
