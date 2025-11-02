@@ -61,7 +61,7 @@ async function relations_ProcessQueue() {
             // Process relations of the currently processed anime
             const subRelations = anime_data.relations || [];
             for (const rel of subRelations) {
-                if (rel.relation === "Character" || rel.relation === "Other") continue;
+                if (rel.relation === "Character" || rel.relation === "Other" || rel.relation === "Summary") continue;
 
                 for (const entry of rel.entry) {
                     if (entry.type === "anime" && !AppState.relations.seenIds.has(entry.mal_id)) {

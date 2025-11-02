@@ -95,7 +95,7 @@ async function recalc_ProcessQueue(){
         try {
             await delay(1000); // Rate limit
             const detail = await jikan_GetAnimeData(aId,"full")
-
+    
             // Skip unwanted types
             if (!AppState.recalc.relations.some(i => i.id === aId) && detail.type !== "CM" && detail.type !== "Music") {
                 AppState.recalc.relations.push({
@@ -111,7 +111,7 @@ async function recalc_ProcessQueue(){
             // Process relations of the relation
             const subRelations = detail.relations || [];
             for (const rel of subRelations) {
-                if (rel.relation === "Character" || rel.relation === "Other") continue;
+                if (rel.relation === "Character" || rel.relation === "Other" || rel.relation === "Summary") continue;
 
                 for (const entry of rel.entry) {
                     if (entry.type === "anime" && !AppState.recalc.seenIds.has(entry.mal_id)) {
