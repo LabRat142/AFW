@@ -9,7 +9,10 @@
 function search_Init(){
     // Focus on searchbar
     const searchInput = document.getElementById("animeSearchInput");
-    if (searchInput) { searchInput.focus(); }
+    if (searchInput) {
+        searchInput.focus();
+        searchInput.value = "";
+    }
 
     // Fetch and show anime
     search_FetchItems()

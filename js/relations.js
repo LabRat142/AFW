@@ -177,4 +177,5 @@ function relations_AddFranchise() {
     loadMyList();
 
     alert(`Franchise "${name}" saved!`);
+    navigate("search");
 }
