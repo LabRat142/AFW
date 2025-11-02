@@ -115,7 +115,7 @@ function details_EditFranchiseName() {
  * Delete the currently viewed franchise
  */
 function details_DeleteFranchise() {
-    const index = AppState.currentFranchiseIndex;
+    const index = AppState.details.currentFranchiseIndex;
     const selected = AppState.franchises[index];
 
     if (confirm(`Are you sure you want to delete "${selected.name}" from your list?`)) {
