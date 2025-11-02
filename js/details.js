@@ -86,9 +86,9 @@ function details_MarkCompleted(){
         selected.marked = false;
         if (selected.content.some(item=>item.watched === false)){
             selected.completed = false;
+            document.getElementById("details-completion").innerText = "Not Completed";
         }
         document.getElementById("checkmark-image").src = "./images/unchecked.png"
-        document.getElementById("details-completion").innerText = "Not Completed";
     }
 
     AppState.franchises[index] = selected;
