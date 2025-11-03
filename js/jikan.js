@@ -25,7 +25,7 @@ async function jikan_GetAnimeSearch(q = "", limit = 25, page = 1, order_by = "po
 
         let foundTop = false;
         for (const item of data.data) {
-            if (!q && !foundTop) {
+            if (order_by == "popularity" && !q && !foundTop) {
                 if (item.popularity === 1) {
                     foundTop = true;
                 } else {
