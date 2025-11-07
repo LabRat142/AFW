@@ -97,7 +97,7 @@ async function recalc_ProcessQueue(){
             const detail = await jikan_GetAnimeData(aId,"full")
     
             // Skip unwanted types
-            if (!AppState.recalc.relations.some(i => i.id === aId) && detail.type !== "CM" && detail.type !== "Music") {
+            if (!AppState.recalc.relations.some(i => i.id === aId) && detail.type !== "CM" && detail.type !== "Music" && detail.type !== "PV") {
                 AppState.recalc.relations.push({
                     id: detail.mal_id,
                     name: detail.title_english || detail.title,

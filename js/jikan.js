@@ -32,7 +32,7 @@ async function jikan_GetAnimeSearch(q = "", limit = 25, page = 1, order_by = "po
                     continue;
                 }
             }
-            if (item.type !== "CM" && item.type !== "Music") {
+            if (item.type !== "CM" && item.type !== "Music" && item.type !== "PV") {
                 search_items.push({
                     id: item.mal_id,
                     name: item.title_english || item.title,
@@ -80,3 +80,26 @@ async function jikan_GetAnimeData(id, type) {
     }
 }
 
+async function jikan_GetTopAnime(){
+    const endpoint = `https://api.jikan.moe/v4/top/anime`
+    const search_items = [];
+    
+    try {
+        const res = await fetch(endpoint);
+        const data = await res.json();
+
+        for (const item of data.data) {
+            if (item.type !== "CM" && item.type !== "Music" && item.type !== "PV") {
+                search_items.push({
+                    id: item.mal_id,
+                    name: item.title_english || item.title,
+                    image: item.images?.jpg?.image_url || ""
+                });
+            }
+        }
+    } catch (err) {
+        console.error("Fetch error:", err);
+    }
+    
+    return search_items;
+}
