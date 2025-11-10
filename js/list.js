@@ -58,7 +58,7 @@ function list_UpdateCards(items) {
         const sectionHeader = document.createElement("h4");
         sectionHeader.className = "text-secondary fw-bold mt-4 mb-2 d-flex justify-content-between align-items-center";
         const headerLabel = document.createElement("span");
-        headerLabel.textContent = `📁 ${label}`;
+        headerLabel.innerHTML = `📁 ${label} <span  style="font-size: 0.75rem; color: #bbbbbb;">(${entries.length})</span>`;
         sectionHeader.appendChild(headerLabel);
 
         if (!AppState.list.isListView && cardContainer.childElementCount === 0) {
