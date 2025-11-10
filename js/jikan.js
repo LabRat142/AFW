@@ -15,7 +15,7 @@
  * @param {string} [sort] - Direction to sort the results. ("desc" | "asc")
  * @returns {Promise<Array<Object>>} Array of anime objects with `id`, `name`, and `image` properties.
  */
-async function jikan_GetAnimeSearch(q = "", limit = 25, page = 1, order_by = "popularity", sort = "asc") {
+async function jikan_GetAnimeSearch(q = "", order_by = "", sort = "",limit = 25, page = 1) {
     const endpoint = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=${limit}&page=${page}&order_by=${order_by}&sort=${sort}&t=${Date.now()}`;
     const search_items = [];
 
@@ -23,15 +23,7 @@ async function jikan_GetAnimeSearch(q = "", limit = 25, page = 1, order_by = "po
         const res = await fetch(endpoint);
         const data = await res.json();
 
-        let foundTop = false;
         for (const item of data.data) {
-            if (order_by == "popularity" && !q && !foundTop) {
-                if (item.popularity === 1) {
-                    foundTop = true;
-                } else {
-                    continue;
-                }
-            }
             if (item.type !== "CM" && item.type !== "Music" && item.type !== "PV") {
                 search_items.push({
                     id: item.mal_id,

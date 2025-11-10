@@ -23,7 +23,11 @@ function search_Init(){
  */
 async function search_FetchItems(){
     const query = document.getElementById("animeSearchInput").value.trim();
-    AppState.search.anime = await jikan_GetAnimeSearch(query)
+    if (query === "") {
+        AppState.search.anime = await jikan_GetAnimeSearch(query,"popularity")
+    } else {
+        AppState.search.anime = await jikan_GetAnimeSearch(query)
+    }
 
     search_UpdateCards(AppState.search.anime);
 }
