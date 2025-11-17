@@ -52,7 +52,19 @@ async function recalc_FetchUpdates() {
                     existing.image = anime.image;
                 }
                 if (existing.date !== anime.date) {
-                    updatedItems.push(`📅 Date updated for <b>${existing.name}</b>: ${existing.date || "none"} → ${anime.date}`);
+                    const oldDate = existing.date ? new Date(existing.date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                    }) : "none";
+
+                    const newDate = new Date(anime.date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                    });
+
+                    updatedItems.push(`📅 Date updated for <b>${existing.name}</b>: ${oldDate} → ${newDate}`);
                     existing.date = anime.date;
                 }
             }
