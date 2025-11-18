@@ -44,11 +44,14 @@ async function recalc_FetchUpdates() {
                     existing.name = anime.name;
                 }
                 if (existing.episodes !== anime.episodes) {
-                    updatedItems.push(`📺 Episodes updated for <b>${existing.name}</b>: ${existing.episodes} → ${anime.episodes}`);
+                    updatedItems.push(`📺 Episodes updated for <b>${existing.name}</b>: <br>${existing.episodes} → ${anime.episodes}`);
                     existing.episodes = anime.episodes;
                 }
                 if (existing.image !== anime.image) {
-                    updatedItems.push(`🖼️ Image updated for <b>${existing.name}</b>`);
+                    const oldLink = existing.image ? `<a href="${existing.image}" target="_blank">old</a>` : "none";
+                    const newLink = `<a href="${anime.image}" target="_blank">new</a>`;
+
+                    updatedItems.push(`🖼️ Image updated for <b>${existing.name}</b>: <br>${oldLink} → ${newLink}`);
                     existing.image = anime.image;
                 }
                 if (existing.date !== anime.date) {
@@ -64,7 +67,7 @@ async function recalc_FetchUpdates() {
                         day: "numeric"
                     });
 
-                    updatedItems.push(`📅 Date updated for <b>${existing.name}</b>: ${oldDate} → ${newDate}`);
+                    updatedItems.push(`📅 Date updated for <b>${existing.name}</b>: <br>${oldDate} → ${newDate}`);
                     existing.date = anime.date;
                 }
             }
@@ -100,6 +103,7 @@ async function recalc_FetchUpdates() {
  */
 async function recalc_ProcessQueue(){
     while (AppState.recalc.queue.length > 0) {
+        if (AppState.stopFetches) break;
         const aId = AppState.recalc.queue.shift();
         if (AppState.recalc.seenIds.has(aId)) continue;
         AppState.recalc.seenIds.add(aId);
