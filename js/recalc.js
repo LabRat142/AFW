@@ -9,6 +9,11 @@
 function recalc_Init(){
     AppState.stopFetches = false;
 
+    document.getElementById("recalc-status").innerHTML = "";
+    document.getElementById("recalc-addAnimeBtn").disabled = true;
+    document.getElementById("recalc-loading-img").src = "./images/loading.gif";
+    document.getElementById("recalc-info-title").innerText = "Loading your franchise..."
+    
     recalc_FetchUpdates();
 }
 
