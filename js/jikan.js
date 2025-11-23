@@ -24,7 +24,7 @@ async function jikan_GetAnimeSearch(q = "", order_by = "", sort = "",limit = 25,
         const data = await res.json();
 
         for (const item of data.data) {
-            if (item.type !== "CM" && item.type !== "Music" && item.type !== "PV") {
+            if (item.popularity!="0" && item.type !== "CM" && item.type !== "Music" && item.type !== "PV") {
                 search_items.push({
                     id: item.mal_id,
                     name: item.title_english || item.title,
