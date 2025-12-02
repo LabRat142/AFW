@@ -114,9 +114,16 @@ async function recalc_ProcessQueue(){
         AppState.recalc.seenIds.add(aId);
 
         try {
-            await delay(1000); // Rate limit
-            const detail = await jikan_GetAnimeData(aId,"full")
-    
+           let detail = null;
+            for (i=0; i<3; i++){
+                await delay(1000); // Rate limit
+                detail = await jikan_GetAnimeData(aId,"full")
+                if (detail != null){
+                    break;
+                }
+            }
+            if (detail == null){return;}
+            
             // Skip unwanted types
             if (!AppState.recalc.relations.some(i => i.id === aId) && detail.type !== "CM" && detail.type !== "Music" && detail.type !== "PV") {
                 AppState.recalc.relations.push({
