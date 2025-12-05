@@ -145,7 +145,7 @@
 						<img id="checkmark-image" class="img-fluid m-1 position-absolute" src="./images/unchecked.png"
 							style="height:50px; width:50px; cursor:pointer; top:0; left:0" onclick="details_MarkCompleted()" title="Mark as completed" />
 						<img id="edit-image" class="img-fluid m-1 position-absolute" src="./images/edit.png"
-						style="height:50px; width:50px; cursor:pointer; top:0; right:0; display:none;" onclick="details_UpdateImage()" title="Change Image" />
+						style="height:50px; width:50px; cursor:pointer; top:0; right:0;" onclick="details_UpdateImage()" title="Change Image" />
 					</div>
 					<h3 id="details-name" class="text-primary fw-bold"></h3>
 					<p id="details-completion" class="text-muted text-center mb-3">Not Completed</p>
@@ -154,6 +154,10 @@
 						<button class="btn btn-sm btn-outline-danger" onclick="details_DeleteFranchise()">🗑️ Delete Franchise</button>
 					</div>
 					<p id="total-episodes" class="text-muted text-center mb-3"></p>
+					<div id="details-image-selection-info" class="alert alert-info my-4" style="display:none;">
+						<p>Click on an anime to set it as the franchise cover image. <br/>
+						Click the edit icon again to exit image selection mode.</p>
+					</div>
 				</div>
 				<!-- Right: Anime List -->
 				<div class="col-md-8">

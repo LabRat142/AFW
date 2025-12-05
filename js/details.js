@@ -7,6 +7,7 @@
  * Initialize details page
  */
 function details_Init(franchise_name){
+    AppState.details.isSelectingImage = false;
     details_Load(franchise_name)
 }
 
@@ -58,11 +59,18 @@ function details_Load(name) {
         `;
 
         item.addEventListener("click", () => {
-            anime.watched = !anime.watched;
-            item.classList.toggle("list-group-item-success");
+            if (AppState.details.isSelectingImage) {
+                // Update franchise image
+                selected.imageUrl = anime.image;
+                document.getElementById("details-image").src = anime.image;
+                AppState.franchises[AppState.details.currentFranchiseIndex] = selected;
+                saveMyList();
+            } else {
+                anime.watched = !anime.watched;
+                item.classList.toggle("list-group-item-success");
 
-            updateFranchiseCompletion(AppState.franchises[AppState.details.currentFranchiseIndex]);
-
+                updateFranchiseCompletion(AppState.franchises[AppState.details.currentFranchiseIndex]);
+            }
         });
 
         list.appendChild(item);
@@ -93,6 +101,11 @@ function details_MarkCompleted(){
 
     AppState.franchises[index] = selected;
     saveMyList();
+}
+
+function details_UpdateImage() {
+    AppState.details.isSelectingImage = !AppState.details.isSelectingImage
+    document.getElementById("details-image-selection-info").style.display = AppState.details.isSelectingImage ? "block" : "none";
 }
 
 /**

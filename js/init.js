@@ -22,6 +22,7 @@ let AppState = {
     },
     details: {
         currentFranchiseIndex: null,
+        isSelectingImage: false
     },
     recalc: {
         relations: [],
@@ -113,6 +114,7 @@ function resetAppState(){
         },
         details: {
             currentFranchiseIndex: null,
+            isSelectingImage: false
         },
         recalc: {
             relations: [],
