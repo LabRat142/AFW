@@ -32,3 +32,13 @@
     text-overflow: ellipsis;
 	max-width:100%;
 }
+
+.franchise-block .anime-list {
+  display: none; /* hidden by default */
+  margin-left: 1rem;
+  padding-left: 0;
+}
+
+.franchise-block:hover .anime-list {
+  display: block; /* show on hover */
+}

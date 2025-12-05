@@ -34,6 +34,7 @@ function navigate(page, params){
         case "list": list_Init(params); break;
         case "details": details_Init(params); break;
         case "recalc": recalc_Init(params); break;
+        case "malport": malport_Init(params); break;
         default:
             console.warn(`No initializer defined for page "${page}"`);
     }

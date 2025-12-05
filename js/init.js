@@ -28,6 +28,13 @@ let AppState = {
         seenIds: new Set(),
         queue: [],
         franchiseRelations: {}
+    },
+    malport: {
+        seenIds: new Set(),
+        completedIds: new Set(),
+        relations: [],
+        queue: [],
+        franchiseRelations: {}
     }
 }
 
@@ -110,6 +117,13 @@ function resetAppState(){
         recalc: {
             relations: [],
             seenIds: new Set(),
+            queue: [],
+            franchiseRelations: {}
+        },
+        malport: {
+            seenIds: new Set(),
+            completedIds: new Set(),
+            relations: [],
             queue: [],
             franchiseRelations: {}
         }
