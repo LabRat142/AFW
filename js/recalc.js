@@ -13,6 +13,8 @@ function recalc_Init(){
     document.getElementById("recalc-addAnimeBtn").disabled = true;
     document.getElementById("recalc-loading-img").src = "./images/loading.gif";
     document.getElementById("recalc-info-title").innerText = "Loading your franchise..."
+    document.getElementById("RecalcCardContainer").innerHTML = "";
+    document.getElementById("recalc-changelog").innerHTML = "";
     
     recalc_FetchUpdates();
 }
