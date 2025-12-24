@@ -19,7 +19,7 @@
 <body>
 	<!-- Home Page -->
 	<div id="index" class="page" style="display:block;">
-		<div class="container py-5">
+		<div class="container-lg py-5">
 			<!-- Title & Info -->
 			<div class="text-center mb-4">
 				<h1 class="fw-bold text-primary">🎬 Anime Franchises Watchlist</h1>
@@ -28,7 +28,7 @@
 
 			<div class="row justify-content-start">
 				<!-- GOTO Anime Search -->
-				<div class="col-md-4 offset-md-2 mb-3">
+				<div class="col-sm-6 col-lg-4 offset-lg-2 mb-3">
 					<div class="card shadow-sm h-100">
 						<div class="card-body text-center">
 							<h5 class="card-title">🔍 Search Anime</h5>
@@ -38,7 +38,7 @@
 					</div>
 				</div>
 				<!-- GOTO My List -->
-				<div class="col-md-4 mb-3">
+				<div class="col-sm-6 col-lg-4 mb-3">
 					<div class="card shadow-sm h-100">
 						<div class="card-body text-center">
 							<h5 class="card-title">📋 View My List</h5>
@@ -47,7 +47,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4 offset-md-2 mb-3">
+				<div class="col-sm-6 col-lg-4 offset-lg-2 mb-3">
                 	<div class="card shadow-sm h-100">
                     	<div class="card-body text-center">
 							<h5 class="card-title">🌐 Import from MAL</h5>
@@ -56,7 +56,7 @@
                     	</div>
                 	</div>
             	</div>
-				<div class="col-4"></div>
+				<div class="col-lg-4"></div>
 				<div class="col-2"></div>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 	
 	<!-- Anime Search Page -->
 	<div id="search" class="page" style="display:none;">
-		<div class="container py-4">
+		<div class="container-lg py-4">
 			<!-- Navigation Buttons -->
 			<div class="top-0 end-0 my-2 d-flex justify-content-end">
 				<button class="btn btn-outline-secondary" onclick="navigate('list');">📋 Go to List</button>
@@ -82,7 +82,7 @@
 	
 	<!-- Relations Finder Page -->
 	<div id="relations" class="page" style="display:none;">
-		<div class="container py-4 position-relative">
+		<div class="container-lg py-4 position-relative">
 			<!-- Navigation Buttons -->
 			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
 				<button class="btn btn-outline-secondary mb-2" onclick="confirmNavigate('search');">← Go back to search</button>
@@ -102,7 +102,7 @@
 	
 	<!-- My List Page -->
 	<div id="list" class="page" style="display:none;">
-		<div class="container py-4">
+		<div class="container-lg py-4">
 			<!-- Navigation Buttons -->
 			<div class="d-flex justify-content-between align-items-center mb-3">
 				<div class="d-flex gap-2">
@@ -134,7 +134,7 @@
 	
 	<!-- Franchise Details Page -->
 	<div id="details" class="page" style="display:none;">
-		<div class="container py-4">
+		<div class="container-lg py-4">
 			<!-- Navigation Button -->
 			<button class="btn btn-outline-secondary mb-3" onclick="navigate('list')">← Back to List</button>
 			<!-- Info -->
@@ -171,7 +171,7 @@
 	
 	<!-- Update Franchises Page -->
 	<div id="recalc" class="page" style="display:none;">
-		<div class="container py-4 position-relative">
+		<div class="container-lg py-4 position-relative">
 			<!-- Navigation Buttons -->
 			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
 				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">📋 Go to My List</button>
@@ -181,7 +181,7 @@
 				<img id="recalc-loading-img" src="./images/loading.gif" class="mb-3" style="width:160px; height:160px;" alt="Loading..." />
 				<h4 id="recalc-info-title" class="text-primary fw-semibold mb-2">Loading ...</h4>
 				<p class="text-muted text-center mb-3" style="max-width: 400px;">
-					As anime titles load, missing entries will appear in the left and edited entires will appear on the right. Clicking the button will apply these changes to your list. This might take a while depending on how many franchises you have saved.
+					As anime titles load, missing entries edited properties will appear below. Clicking the button will apply these changes to your list. This might take a while depending on how many franchises you have saved.
 				</p>
 				<button id="recalc-addAnimeBtn" class="btn btn-lg btn-success px-4" disabled onclick="recalc_UpdateFranchises()">♥️ Update Franchises</button>
 			</div>
@@ -207,7 +207,7 @@
 
 	<!-- MAL Import Page -->
 	<div id="malport" class="page" style="display:none;">
-		<div class="container py-4 position-relative">
+		<div class="container-lg py-4 position-relative">
 			<!-- Navigation Buttons -->
 			<div class="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" style="z-index: 10;">
 				<button class="btn btn-outline-secondary" onclick="confirmNavigate('list');">📋 Go to My List</button>

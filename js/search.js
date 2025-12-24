@@ -49,7 +49,7 @@ function search_UpdateCards(items){
     // Show items
     items.forEach(item => {
         const card = document.createElement("div");
-        card.className = "col-md-2 mb-2";
+        card.className = "col-sm-4 col-lg-2 mb-2";
 
         card.innerHTML = `
 			<div class="card h-100">

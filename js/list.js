@@ -4,7 +4,7 @@
  */
 
 const sizeVars = {
-    colClasses: ["col-md-1 px-1 mb-2", "col-md-2 px-2 mb-2", "col-md-4 px-3 mb-2"],
+    colClasses: ["col-lg-1 px-1 mb-2", "col-lg-2 px-2 mb-2", "col-lg-4 px-3 mb-2"],
     imgHeights: ["150px", "300px", "600px"],
     titleRows: [2,3,4]
 }
@@ -63,7 +63,7 @@ function list_UpdateCards(items) {
 
         if (!AppState.list.isListView && cardContainer.childElementCount === 0) {
             const toggleSizeBtn = document.createElement("button");
-            toggleSizeBtn.className = "btn btn-sm btn-outline-secondary";
+            toggleSizeBtn.className = "d-md-block btn btn-sm btn-outline-secondary";
             toggleSizeBtn.textContent = "↔️ Resize";
             toggleSizeBtn.onclick = list_ToggleCardSize;
 
@@ -95,7 +95,7 @@ function list_UpdateCards(items) {
 
             entries.forEach(({ item }) => {
                 const card = document.createElement("div");
-                card.className = `card-wrapper ${sizeVars.colClasses[AppState.list.cardSize]}`;
+                card.className = `card-wrapper col-sm-4 ${sizeVars.colClasses[AppState.list.cardSize]}`;
 
                 card.innerHTML = `
                     <div class="card shadow-sm h-100">
